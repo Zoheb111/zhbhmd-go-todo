@@ -1,17 +1,20 @@
 package main
 
 import (
+	"github.com/Zoheb111/zhbhmd-go-todo/database"
 	_ "github.com/go-sql-driver/mysql"
 
 	"net/http"
 )
 
+func init() {
+	database.ConnectDB()
+}
+
 func main() {
 
-	db := Connect()
-
-	Migrate(db)
-	Seed(db)
+	Migrate(database.DB)
+	Seed(database.DB)
 
 	// { // Query all users
 	// 	type user struct {

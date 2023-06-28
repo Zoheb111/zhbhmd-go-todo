@@ -7,16 +7,19 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Connect() (db *sql.DB) {
+var DB *sql.DB
+var err error
 
-	db, err := sql.Open("mysql", "root:root@(127.0.0.1:3307)/go-todo?parseTime=true")
+func ConnectDB() {
+
+	DB, err = sql.Open("mysql", "root:root@(127.0.0.1:3307)/go-todo?parseTime=true")
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := db.Ping(); err != nil {
+
+	if err := DB.Ping(); err != nil {
 		log.Fatal(err)
 	}
-
-	return db
 
 }
