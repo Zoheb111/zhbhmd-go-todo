@@ -1,4 +1,4 @@
-module github.com/zhbhmd/go-do-todos
+module github.com/Zoheb111/zhbhmd-go-todo
 
 go 1.20
 
