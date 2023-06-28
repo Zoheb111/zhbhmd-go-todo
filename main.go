@@ -1,48 +1,37 @@
 package main
 
 import (
+	"html/template"
+
+	"github.com/Zoheb111/zhbhmd-go-todo/database"
 	_ "github.com/go-sql-driver/mysql"
 
 	"net/http"
 )
 
+func init() {
+	database.ConnectDB()
+}
+
 func main() {
 
-	db := Connect()
+	database.Migrate(database.DB)
+	database.Seed(database.DB)
 
-	Migrate(db)
-	Seed(db)
+	type UserPageData struct {
+		Title    string
+		UserList []database.User
+	}
 
-	// { // Query all users
-	// 	type user struct {
-	// 		id        int
-	// 		username  string
-	// 		password  string
-	// 		createdAt time.Time
-	// 	}
-
-	// 	rows, err := db.Query(`SELECT id, username, password, created_at FROM user`)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	// 	defer rows.Close()
-
-	// 	var users []user
-	// 	for rows.Next() {
-	// 		var u user
-
-	// 		err := rows.Scan(&u.id, &u.username, &u.password, &u.createdAt)
-	// 		if err != nil {
-	// 			log.Fatal(err)
-	// 		}
-	// 		users = append(users, u)
-	// 	}
-	// 	if err := rows.Err(); err != nil {
-	// 		log.Fatal(err)
-	// 	}
-
-	// 	fmt.Printf("%#v", users)
-	// }
+	tmpl := template.Must(template.ParseFiles("web/layout.html"))
+	http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		users := database.FindAllUser()
+		data := UserPageData{
+			Title:    "Users",
+			UserList: users,
+		}
+		tmpl.Execute(w, data)
+	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "web/index.html")
