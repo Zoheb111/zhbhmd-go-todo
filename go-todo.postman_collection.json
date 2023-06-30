@@ -47,12 +47,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/user",
+					"raw": "{{url}}/todo",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"user"
+						"todo"
 					]
 				}
 			},
@@ -64,12 +64,32 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/user",
+					"raw": "{{url}}/todo/1",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"user"
+						"todo",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get todo by user id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/todo/user/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"todo",
+						"user",
+						"1"
 					]
 				}
 			},
