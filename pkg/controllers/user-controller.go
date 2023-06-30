@@ -78,3 +78,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
+
+func GetUserTodo(w http.ResponseWriter, r *http.Request) {
+
+}

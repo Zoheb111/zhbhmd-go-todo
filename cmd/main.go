@@ -1,55 +1,23 @@
 package main
 
 import (
-	"html/template"
-
+	"log"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	"github.com/zhbhmd/go-todo/database"
+	"github.com/zhbhmd/go-todo/pkg/routes"
 )
-
-func init() {
-	database.ConnectDB()
-}
 
 func main() {
 
-	database.Migrate(database.DB)
-	database.Seed(database.DB)
+	r := mux.NewRouter()
 
-	type UserPageData struct {
-		Title    string
-		UserList []database.User
-	}
+	routes.RegisterUserRoutes(r)
+	routes.RegisterTodoRoutes(r)
 
-	router := mux.NewRouter()
+	http.Handle("/", r)
 
-	router.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles("web/user.html"))
-		users := database.FindAllUser()
-		data := UserPageData{
-			Title:    "Users",
-			UserList: users,
-		}
-		tmpl.Execute(w, data)
-	})
-
-	router.HandleFunc("/todos", func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles("web/todo.html"))
-		users := database.FindAllUser()
-		data := UserPageData{
-			Title:    "Users",
-			UserList: users,
-		}
-		tmpl.Execute(w, data)
-	})
-
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "web/index.html")
-	})
-
-	http.ListenAndServe(":8000", router)
-
+	log.Println("Server starting....")
+	log.Fatal(http.ListenAndServe("localhost:8080", r))
 }

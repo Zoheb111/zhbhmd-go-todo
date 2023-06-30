@@ -3,18 +3,18 @@ package models
 import (
 	"time"
 
-	"github.com/jinzhu/gorm"
 	"github.com/zhbhmd/go-todo/pkg/config"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
 
 type User struct {
-	gorm.Model
 	Id        int64     `json:"id"`
 	Username  string    `gorm:"" json:"username"`
 	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
+	Todos     []Todo    `gorm:"foreignKey:CreatedBy" json:"todos"`
 }
 
 func init() {
@@ -24,7 +24,6 @@ func init() {
 }
 
 func (u *User) CreateUser() *User {
-	db.NewRecord(u)
 	db.Create(&u)
 	return u
 }
